@@ -13,26 +13,30 @@ class KnightPathFinder
   end
   
   def build_move_tree
-     
+    queue = Array.new
+    queue << @root_node
+    until queue.empty?
+      start_pos = queue.shift
+      queue.concat(new_move_positions(start_pos))
+    end 
   end
 
-  def valid_moves
+  def valid_moves (pos)
     moves = []
-    moves << [@root_node[0]+1,@root_node[1]+2]
-    moves << [@root_node[0]+2,@root_node[1]+1]
-    moves << [@root_node[0]+2,@root_node[1]-1]
-    moves << [@root_node[0]+1,@root_node[1]-2]
-    moves << [@root_node[0]-1,@root_node[1]+2]
-    moves << [@root_node[0]-2,@root_node[1]+1]
-    moves << [@root_node[0]-2,@root_node[1]-1]
-    moves << [@root_node[0]-1,@root_node[1]-2]
-#    debugger
-    moves.select! { |pos| pos.all? { |coord| coord >= 0 && coord <= 7 }}
+    moves << [pos[0]+1,pos[1]+2]
+    moves << [pos[0]+2,pos[1]+1]
+    moves << [pos[0]+2,pos[1]-1]
+    moves << [pos[0]+1,pos[1]-2]
+    moves << [pos[0]-1,pos[1]+2]
+    moves << [pos[0]-2,pos[1]+1]
+    moves << [pos[0]-2,pos[1]-1]
+    moves << [pos[0]-1,pos[1]-2]
+    moves.select! { |move| move.all? { |coord| coord >= 0 && coord <= 7 }}
     moves
   end
 
-  def new_move_positions
-    new = self.valid_moves.select {|move| @considered.positions.none?(move) }
+  def new_move_positions (pos)
+    new = self.valid_moves(pos).select {|move| @considered.positions.none?(move) }
     @considered_positions.concat(new)
   end
 
